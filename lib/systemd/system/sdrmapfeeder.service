@@ -1,0 +1,9 @@
+[Unit]
+Description=Feed various SDR Data to sdrmap.org
+
+[Service]
+ExecStart=/usr/lib/sdrmapfeeder/sdrmapfeeder.sh
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
