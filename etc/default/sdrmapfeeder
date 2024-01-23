@@ -1,1 +1,25 @@
+#Edit username an password here
+username="yourusername"
+password="yourpassword"
 
+
+#Sysinfo
+#Set to false if you do not want to transmit system info like os, software version or cpu type
+sysinfo=true
+sysinfointerval=30
+
+
+#ADS-B
+#adsb=true
+
+#You can change the path to the aircraft.json here which is not needed if you followed our tutorial. If you are using an already existing setup you may need to alter this.
+#adsbpath='/run/dump1090-mutability/aircraft.json'; #dump1090-mutability
+adsbpath="/run/dump1090-fa/aircraft.json"
+
+
+#Radiosonde
+#radiosonde=true
+radiosondeinterval=3
+
+# path to your autorx log directory
+radiosondepath='/home/username/radiosonde_auto_rx/auto_rx/log'
