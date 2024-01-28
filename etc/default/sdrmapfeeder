@@ -22,4 +22,4 @@ adsbpath="/run/dump1090-fa/aircraft.json"
 radiosondeinterval=3
 
 # path to your autorx log directory
-radiosondepath='/home/username/radiosonde_auto_rx/auto_rx/log'
+radiosondepath='/var/tmp/radiosondeautorx'
