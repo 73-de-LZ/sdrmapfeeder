@@ -59,7 +59,7 @@ while true; do
 			echo "The log directory '$radiosondepath' doesn't exist."
 			exit 1
 		fi;
-		for i in $(find $radiosondepath -mmin -0.1 -name "*.log");
+		for i in $(find $radiosondepath -mmin -0.1 -name "*sonde.log");
 			do
 			tail -n 1 $i | gzip | curl -s -u $username:$password -X POST -H "Content-type: application/json" -H "Content-encoding: gzip" --data-binary @- https://adsb.chaos-consulting.de/radiosondein/index.php
 		done;
