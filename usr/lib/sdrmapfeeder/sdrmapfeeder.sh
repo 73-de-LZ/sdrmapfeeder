@@ -1,4 +1,5 @@
 #!/bin/bash
+export LANG=C.UTF-8
 source /etc/default/sdrmapfeeder
 
 version='3.1'
