@@ -21,7 +21,7 @@ while true; do
 			\"model\":\"$(cat /proc/cpuinfo |grep 'model name'|tail -n 1|cut -d ':' -f 2)\",\
 			\"cores\":\"$(cat /proc/cpuinfo |grep -c -e '^processor')\",\
 			\"load\":\"$(cat /proc/loadavg |cut -d ' ' -f 1)\",\
-			\"temp\":\"$(($(cat /sys/class/thermal/thermal_zone*/temp |sort -n|tail -n 1)/1000))\",\
+			\"temp\":\"$(($(cat /sys/class/thermal/thermal_zone*/temp 2>/dev/null |sort -n|tail -n 1)/1000))\",\
 			\"throttled\":\"$(vcgencmd get_throttled 2>/dev/null |cut -d '=' -f 2 )\"\
 		},\
 		\"memory\":{\
