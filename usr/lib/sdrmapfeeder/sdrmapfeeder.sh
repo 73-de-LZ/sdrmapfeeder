@@ -2,7 +2,7 @@
 export LANG=C.UTF-8
 source /etc/default/sdrmapfeeder
 
-version='3.1'
+version='4.0'
 sysinfolastrun=0
 radiosondelastrun=0
 
@@ -39,7 +39,8 @@ while true; do
 			\"stunnel4\":\"$(dpkg -s stunnel4 2>&1|grep 'Version:'|cut -d ' ' -f 2)\",\
 			\"dump1090-mutability\":\"$(dpkg -s dump1090-mutability 2>&1|grep 'Version:'|cut -d ' ' -f 2)\",\
 			\"dump1090-fa\":\"$(dpkg -s dump1090-fa 2>&1|grep 'Version:'|cut -d ' ' -f 2)\",\
-			\"ais-catcher\":\"$(dpkg -s ais-catcher 2>&1 |grep 'Version:'|cut -d ' ' -f 2)\"\
+			\"ais-catcher\":\"$(dpkg -s ais-catcher 2>&1 |grep 'Version:'|cut -d ' ' -f 2)\",\
+   			\"radiosondeautorxr\":\"$(dpkg -s radiosondeautorx 2>&1 |grep 'Version:'|cut -d ' ' -f 2)\"\
 		},\
 		\"feeder\":{\
 			\"version\":\"$version\",\
