@@ -1,5 +1,6 @@
 [Unit]
 Description=Feed various SDR Data to sdrmap.org
+After=network.target
 
 [Service]
 ExecStart=/usr/lib/sdrmapfeeder/sdrmapfeeder.sh
