@@ -1,8 +1,8 @@
 #!/bin/bash
 export LANG=C.UTF-8
-source /etc/default/sdrmapfeeder
+source /etc/default/sdrmapfeederlz
 
-version='4.LZ.a'
+version='4.0.a'
 sysinfolastrun=0
 radiosondelastrun=0
 
@@ -23,27 +23,40 @@ while true; do
 	if [ "$sysinfo" = "true" ] && [ $(($(date +"%s") - $sysinfolastrun)) -ge "$sysinfointerval" ]
 		then
 		sysinfolastrun=$(date +"%s")
-echo "{\
-	\"cpu\":{\
-		\"model\":\"$(cat /proc/cpuinfo |grep 'model name'|tail -n 1|cut -d ':' -f 2)\",\
-		\"cores\":\"$(cat /proc/cpuinfo |grep -c -e '^processor')\",\
-		\"load\":\"$(cat /proc/loadavg |cut -d ' ' -f 1)\",\
-		\"temp\":\"$(($(cat /sys/class/thermal/thermal_zone*/temp 2>/dev/null |sort -n|tail -n 1)/1000))\"\
-	},\
-		\"memory\":{\
-			\"total\":\"$(cat /proc/meminfo |grep 'MemTotal:'|cut -d ':' -f 2|awk '{$1=$1};1')\",\
-			\"free\":\"$(cat /proc/meminfo |grep 'MemFree:'|cut -d ':' -f 2|awk '{$1=$1};1')\",\
-			\"available\":\"$(cat /proc/meminfo |grep 'MemAvailable:'|cut -d ':' -f 2|awk '{$1=$1};1')\"\
-		},\
-		\"uptime\":\"$(cat /proc/uptime |cut -d ' ' -f 1)\",\
-		\"os\":{\
-			\"kernel\":\"$(uname -r)\"\
-		},\
-		\"feeder\":{\
-			\"version\":\"$version\",\
-			\"interval\":\"$sysinfointerval\"
-		}\
-	}"| gzip -c |curl -s -u $username:$password -X POST -H "Content-type: application/json" -H "Content-encoding: gzip" --data-binary @- https://sys.feed.sdrmap.org/index.php
+json_data="{\
+    \"cpu\":{\
+        \"model\":\"$(cat /proc/cpuinfo |grep 'model name'|tail -n 1|cut -d ':' -f 2)\",\
+        \"cores\":\"$(cat /proc/cpuinfo |grep -c -e '^processor')\",\
+        \"load\":\"$(cat /proc/loadavg |cut -d ' ' -f 1)\",\
+        \"temp\":\"$(($(cat /sys/class/thermal/thermal_zone*/temp 2>/dev/null |sort -n|tail -n 1)/1000))\",\
+        \"throttled\":\"$(vcgencmd get_throttled 2>/dev/null |cut -d '=' -f 2 )\"\
+    },\
+    \"memory\":{\
+        \"total\":\"$(cat /proc/meminfo |grep 'MemTotal:'|cut -d ':' -f 2|awk '{$1=$1};1')\",\
+        \"free\":\"$(cat /proc/meminfo |grep 'MemFree:'|cut -d ':' -f 2|awk '{$1=$1};1')\",\
+        \"available\":\"$(cat /proc/meminfo |grep 'MemAvailable:'|cut -d ':' -f 2|awk '{$1=$1};1')\"\
+    },\
+    \"uptime\":\"$(cat /proc/uptime |cut -d ' ' -f 1)\",\
+    \"os\":{\
+        \"kernel\":\"$(uname -r)\"\
+    },\
+    \"packages\":{\
+        \"c2isrepo\":\"$(cat /etc/apt/sources.list.d/*|grep -c 'https://repo.chaos-consulting.de')\",\
+        \"mlat-client-c2is\":\"$(dpkg -s mlat-client-c2is 2>&1|grep 'Version:'|cut -d ' ' -f 2)\",\
+        \"stunnel4\":\"$(dpkg -s stunnel4 2>&1|grep 'Version:'|cut -d ' ' -f 2)\",\
+        \"dump1090-mutability\":\"$(dpkg -s dump1090-mutability 2>&1|grep 'Version:'|cut -d ' ' -f 2)\",\
+        \"dump1090-fa\":\"$(dpkg -s dump1090-fa 2>&1|grep 'Version:'|cut -d ' ' -f 2)\",\
+        \"ais-catcher\":\"$(dpkg -s ais-catcher 2>&1 |grep 'Version:'|cut -d ' ' -f 2)\",\
+        \"radiosondeautorxr\":\"$(dpkg -s radiosondeautorx 2>&1 |grep 'Version:'|cut -d ' ' -f 2)\"\
+    },\
+    \"feeder\":{\
+        \"version\":\"$version\",\
+        \"interval\":\"$sysinfointerval\"\
+    }\
+}"
+json_data="$(echo "$json_data" | tr -d '[:space:]')"
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] $json_data" >> /tmp/sdrmapfeederlz.log
+echo "$json_data" | gzip -c | curl -s -u $username:$password -X POST -H "Content-type: application/json" -H "Content-encoding: gzip" --data-binary @- https://sys.feed.sdrmap.org/index.php
 	fi;
 
 	# if [ "$adsb" = "true" ]
