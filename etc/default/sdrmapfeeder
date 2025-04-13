@@ -1,25 +1,28 @@
-#Edit username an password here
+# Edit username an password here
 username="yourusername"
 password="yourpassword"
 
 
-#Sysinfo
-#Set to false if you do not want to transmit system info like os, software version or cpu type
+# Sysinfo
+# Set to false if you do not want to transmit system info like os, software version or cpu type
 sysinfo=true
-sysinfointerval=30
+sysinfointerval=60
 
 
 #ADS-B
-#adsb=true
+adsb=true
 
-#You can change the path to the aircraft.json here which is not needed if you followed our tutorial. If you are using an already existing setup you may need to alter this.
-#adsbpath='/run/dump1090-mutability/aircraft.json'; #dump1090-mutability
-adsbpath="/run/dump1090-fa/aircraft.json"
+# You can change the path to the aircraft.json here which is not needed if you followed our tutorial. If you are using an already existing setup you may need to alter this.
+# adsbpath='/run/dump1090-mutability/aircraft.json'; #dump1090-mutability or adsbpath="/run/dump1090-fa/aircraft.json"
+# For ultrafeeder or readsb if volume mount [- /tmp/runreadsb:/run/readsb]  >>> adsbpath="/tmp/runreadsb/aircraft.json"   
+# or using json expose [ports: - 30152:30152] and requests to http://localhost:30152/?all
+adsbpath="http://localhost:30152/?all"
 
 
-#Radiosonde
-#radiosonde=true
+# Radiosonde
+radiosonde=true
 radiosondeinterval=3
 
-# path to your autorx log directory
-radiosondepath='/var/tmp/radiosondeautorx'
+# path to your autorx log directory >>> radiosondepath='/var/tmp/radiosondeautorx'
+# or path to your autorx log directory if docker used
+radiosondepath='/root/radiosonde_auto_rx/log'
